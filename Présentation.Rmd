@@ -1,0 +1,261 @@
+---
+title: "Traitement des questions ouvertes sur R : text mining"
+author: |
+  GADO Seman Giovanni Jocelyn \
+  & \
+  HABA Fromo Francis \
+  & \
+  SARR Abdou Karim \
+  \
+  \textit{Elèves ingénieurs statisticiens économistes} \
+  \
+  Professeur : \textbf{M. HEMA Aboubacar} , \textit{Analyste de recherches}
+date: "1er Juin 2024"
+output: 
+ beamer_presentation:
+    theme: "CambridgeUS"
+    colortheme: "Dolphin"
+    fonttheme: "Professionalfonts"
+    keep_tex: TRUE
+    toc: TRUE
+    slide_level: 3
+    latex_engine: xelatex
+header-includes: 
+- \AtBeginSection[]{
+   \begin{frame}{Sommaire}
+   \tiny\linespread{0.5}\selectfont\tableofcontents[currentsection, hideothersubsections]
+   \end{frame}
+  }  
+- \AtBeginSubsection{}  
+- \titlegraphic{\includegraphics[width=0.05\textwidth]{C:/Users/ASUS/Desktop/ISEP 3/ENSAE-Dakar-logo.png}}
+---
+
+
+# \textbf{ Introduction} 
+
+L’ère numérique a conduit à une prolifération de données textuelles disponibles : emails, articles de blogs, réseaux sociaux, documents d’entreprise, etc.\
+Les entreprises et les organisations génèrent et stockent des volumes massifs de texte 
+non structurés, ne pouvant être utilisés directement et qui nécessitent des méthodes efficaces pour en extraire des informations pertinentes. Parmi tous les outils permettant de le faire, le **\textcolor{red}{text mining}** nous intéresse particulièrement.\
+Dans cette présentation, nous essayerons dans une première partie d'aborder les généralités du text mining, ensuite nous verrons les étapes de son déroulement ainsi que les packages de R dédiés au text mining et nous finirons avec les présentations des résultats d'un cas d'application.
+
+
+# \textbf{Généralités}
+
+## \textbf{Qu'est ce que c'est que le text mining ?}
+
+Le **\textcolor{red}{text mining}** (traduit en français par **fouille de texte**) est un ensemble de techniques d’exploration de données qui repose sur le Machine Learning et qui permet de transfomer des données **\textcolor{red}{textuelles}** non structurées en données structurées pour ensuite procéder à leur analyse et en tirer des informations. C'est une branche du **data mining** qui regroupent les techniques d'exploitation des données de différents types.\
+Il a a émergé dans les années 1980 et 1990 avec le développement rapide des technologies.
+
+
+## \textbf{Quelques méthodes et techniques du text mining}
+
+
+- **\textcolor{red}{La technique de la fréquence de mots}**\
+• Identification des termes ou concepts les plus récurrents dans un ensemble de données.\
+• Utile, notamment pour analyser les avis de clients ou les conversations sur les réseaux sociaux.
+\
+- **\textcolor{red}{La méthode de la collocation}**\
+Répérage des séquences de mots apparaissant fréquemment à proximité l’une de l’autre. Certains mots apparaissent très souvent ensemble (bigrammes ou de trigrammes, des combinaisons de deux à trois mots)
+\
+- **\textcolor{red}{La méthode de la concordance}**\
+Reconnaissance du contexte dans lequel un ensemble de mots apparaît dans un texte. Cette technique permet d’éviter l’ambiguïté et de comprendre le sens d’un terme dans le contexte spécifique.
+\
+
+## 
+
+- **\textcolor{red}{Les systèmes « IR » (information retrieval)}**\
+Utilisation des différents algorithmes pour suivre les comportements des utilisateurs et identifier les données pertinentes (La tokenization)
+
+- **\textcolor{red}{L’analyse de sentiment}**\
+Analyser les émotions contenues dans un texte
+
+
+##
+
+
+## \textbf{Text Mining vs Text Analytics : quelle est la différence ?}
+Le **\textcolor{red}{Text Mining}** est souvent confondu avec le **\textcolor{red}{Text Analytics}**. En réalité, il s’agit de deux concepts légèrement différents permettant d’analyser automatiquement des textes.\
+Le Text Mining identifie les informations pertinentes dans un texte, tandis que le Text Analytics vise à découvrir des tendances à travers de larges ensembles de données.\
+En général, le Text Analytics est utilisé pour créer des tableaux, des diagrammes et des graphiques ou autres rapports visuels(analyses quantitatives). Le Text Mining quant à lui, combine les statistiques, la linguistique et le Machine Learning pour prédire automatiquement des résultats à partir d’expériences passées(analyses qualitatives).
+Ces deux notions se confondent assez souvent.
+
+
+## \textbf{Quelques applications du text mining que nous retrouvons dans la vie de tous les jours}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.8\textwidth]{poulet_2.png}
+    \label{fig:poulet_2}
+    \caption{Recherches sur les différents moteurs de recherche}
+\end{figure}
+
+##
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.8\textwidth]{mail_2.png}
+    \label{fig:mail_2.png}
+    \caption{Gestion des spams}
+\end{figure}
+
+
+
+# \textbf{Etapes du processus de text mining et packages utilisés sur R pour le text mining}
+
+## \textbf{Etapes du processus de text mining}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Process.jpg}
+    \label{fig:process}
+\end{figure}
+
+##
+
+Les différentes étapes du processus peuvent être résumées en __4__ grandes étapes :
+\
+
+- **\textcolor{red}{Collecte des Données}**\
+Rassembler les textes à analyser à partir de diverses sources : web scraping, bases de données, 
+fichiers internes, etc.
+\
+
+- **\textcolor{red}{Prétraitement}**\
+• Nettoyage : Enlever les éléments non pertinents (ponctuations inutiles)\
+• Tokenisation : Diviser le texte en unités linguistiques (mots, phrases)\
+• Lemmatisation/Stemming : Réduire les mots à leur forme de base ou racine
+\
+
+##
+
+- **\textcolor{red}{Transformation}**\
+• Vectorisation : Convertir le texte en une forme numérique utilisable par les algorithmes (par 
+exemple, TF-IDF, bag-of-words)\
+• Réduction de dimensionnalité : Utiliser des techniques comme LSA (Latent Semantic 
+Analysis) pour simplifier les données textuelles
+\
+
+- **\textcolor{red}{Interprétation et Visualisation}**\
+Présenter les résultats de manière claire et compréhensible, souvent à l’aide de visualisations
+\
+
+
+## \textbf{Packages utilisés sur R pour le text mining}
+Voici quelques de R utilisés pour le text mining
+\
+
+- **\textcolor{red}{tm (Text Mining)}**\
+• Importation de textes à partir de diverses sources (PDF, CSV, etc.)\
+• Création de corpus et nettoyage de texte (élimination des stopwords, mise en minuscule, suppression des ponctuations)\
+• Transformation des textes en Document-Term Matrices (DTM)\
+• Analyse de fréquence des termes, nuages de mots, etc.
+\
+
+- **\textcolor{red}{text2vec}**\
+• Tokenisation, création de vocabulaire et encodage de documents\
+• Implémentation d'algorithmes de modélisation de texte tels que Latent Dirichlet Allocation (LDA) pour l'analyse de sujets\
+• Fonctions pour l'apprentissage supervisé et non supervisé sur des données textuelles
+\
+
+##
+
+- **\textcolor{red}{tidytext}**\
+• Conversion de textes en formats de données ordonnées\
+• Fonctions pour l'analyse des sentiments, la fréquence des termes, la modélisation de sujets\
+• Intégration avec d'autres packages __tidyverse__ pour une manipulation et une visualisation facile des données textuelles
+\
+
+- **\textcolor{red}{quanteda}**\
+• Création et manipulation de corpus, nettoyage et prétraitement du texte\
+• Conversion en Document-Feature Matrices (DFM)\
+• Analyse de la fréquence des termes, modèles de mots-clés, analyse de similarité, etc.\
+• Support pour l'analyse des sentiments et la modélisation des sujets
+\
+
+- **\textcolor{red}{topicmodels}**\
+• Création de modèles de sujets pour extraire des thèmes à partir d'un corpus\
+• Visualisation et interprétation des résultats
+
+
+
+# \textbf{Résultats de l'application sous R}
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Base.png}
+    \label{fig:base}
+    \caption{Discours des chefs d'Etat américains de 1790 à 2014}
+\end{figure}
+
+
+##
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Corpus.png}
+    \label{fig:corpus}
+    \caption{Création des corpus}
+\end{figure}
+
+
+##
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Tok.png}
+    \label{fig:nuage_1}
+    \caption{Tokénisation du corpus}
+\end{figure}
+
+
+##
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Nuage (2).png}
+    \label{fig:nuage_2}
+    \caption{Nuage de mots}
+\end{figure}
+
+##
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Nuage_obama.png}
+    \label{fig:nuage_3}
+    \caption{Nuage d'un président en particulier}
+\end{figure}
+
+##
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Nuage_dict.png}
+    \label{fig:nuage_4}
+    \caption{Nuage d'un dictionnaire}
+\end{figure}
+
+##
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Comport.png}
+    \label{fig:aperçu}
+    \caption{Aperçu des phrases comportant le mot 'freedom'}
+\end{figure}
+
+##
+
+# \textbf{Conclusion}
+
+Le traitement des questions ouvertes en utilisant le text mining avec R offre une approche puissante pour analyser et extraire des informations précieuses à partir de données textuelles non structurées. Grâce à des packages comme tm, text2vec, tidytext, et quanteda. Les analystes peuvent efficacement nettoyer, transformer et explorer des corpus de textes. Ces outils permettent d'identifier des tendances, des sentiments et des motifs récurrents, aidant ainsi à une meilleure compréhension des opinions et des perceptions des répondants. En somme, le text mining en R représente une solution robuste et flexible pour le traitement des questions ouvertes, facilitant l'extraction d'insights exploitables et la prise de décisions informées.
+
+
+# \textbf{Bibliographie et webographie}
+
+- Julia Silge and David Robinson, \textit{Text mining with R} (bookdown.org)  
+- François Husson, \textit{R pour la statistique et la science des données}  
+- \textcolor{blue}{https://sites.google.com/site/rgraphiques/5--applications/textmining-en-langage-r}
+
+
+
+

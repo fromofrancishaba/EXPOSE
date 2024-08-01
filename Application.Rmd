@@ -1,0 +1,107 @@
+---
+title: "Cas pratique"
+author: "GADO Seman Giovanni Jocelyn & HABA Fromo Francis & SARR Abdou Karim"
+date: "2024-05-25"
+output: pdf_document
+---
+
+# Différents packages à charger
+```{r}
+library(tidyverse)
+library(quanteda)
+library(quanteda.textplots)
+library(quanteda.textstats)
+library(stopwords)
+library(textmineR)
+```
+
+
+
+# Importation de la base de données
+```{r}
+url = 'https://bit.ly/2QoqUQS'
+d = read_csv(url)
+head(d)
+```
+
+# Création du corpus
+```{r}
+corpus = corpus(d, text_field = 'text')
+corpus
+```
+# 
+```{r}
+# Tokeniser le corpus
+tokens <- tokens(corpus, remove_punct = TRUE)
+
+tokens <- tokens_wordstem(tokens, language = "en")
+
+# Supprimer les mots vides des tokens
+tokens <- tokens_remove(tokens, pattern = stopwords("en"))
+
+# Créer la matrice Document-Feature Matrices à partir des tokens nettoyés
+mat <- dfm(tokens)
+
+mat
+
+```
+
+# Suppression des mots apparaissant moins de 10 fois
+```{r}
+dtm = dfm_trim(mat ,min_termfreq = 10)
+dtm
+```
+
+# Nuages
+```{r}
+textplot_wordcloud(dtm, max_words = 50) # Avec une seule couleur
+textplot_wordcloud(dtm, max_words = 50, color = c('blue','red','black','green','yellow','purple'))
+textstat_frequency(dtm, n = 10)
+```
+
+# Un président en particulier
+```{r}
+is_obama = docvars(dtm)$President == 'Barack Obama'
+obama_dtm = dtm[is_obama,]
+textplot_wordcloud(dtm, max_words = 50, color = c('blue','red','black','green','yellow','purple'))
+
+```
+
+```{r}
+ts = textstat_keyness(dtm,is_obama)
+head(ts, 20)
+tail(ts, 20)
+```
+
+# Statistiques relatives du pr
+```{r}
+textplot_keyness(ts)
+```
+
+
+
+# Utilisation d'un mot en particulier
+```{r}
+k = kwic(tokens(corpus), 'freedom', window = 5)
+head(k,10)
+```
+
+# Création d'un corpus de dictionnaire
+```{r}
+dict = dictionary(list(terrorism ='terror*', economy =c('econom*','tax*', 'job*'), military = c('army*','navy*')))
+dict_tm = dfm_lookup(dtm, dict, exclusive = T)
+
+dict_tm
+```
+
+# Même processus
+```{r}
+textplot_wordcloud(dict_tm, max_words = 50)
+textplot_wordcloud(dict_tm, max_words = 50, color = c('blue','red','green'))
+textstat_frequency(dict_tm, n = 10)
+
+kwic(tokens(corpus), dict$economy, window = 2)
+```
+
+
+
